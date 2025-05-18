@@ -1,59 +1,57 @@
-module.exports = async (req, res) => {
+export default async (req, res) => {
     const { platform, id } = req.query;
 
     const API_CONFIG = {
-        '1': { // QQ音乐
-            song: `${process.env.QQ_MUSIC_API}${id}`,
-            lyric: `${process.env.QQ_LYRIC_API}${id}`
-        },
-        '2': { // 网易云
-            song: `${process.env.NETEASE_API}${id}`
-        },
-        '3': { // 酷我
-            song: `${process.env.KUWO_API}${id}`
-        }
+        '1': process.env.QQ_LYRIC_API,  // QQ音乐歌词
+        '2': process.env.NETEASE_API,   // 网易云
+        '3': process.env.KUWO_API       // 酷我
     };
 
-    if (!API_CONFIG[platform]) {
-        return res.status(400).json({ code: 400, msg: '不支持的平台' });
-    }
-
     try {
-        // 获取歌曲信息
-        const songRes = await fetch(API_CONFIG[platform].song);
-        let songData = await songRes.json();
+        const response = await fetch(`${API_CONFIG[platform]}${id}`);
+        const data = await response.json();
 
-        // QQ音乐特殊处理
-        if (platform === '1') {
-            // 获取歌词
-            const lyricRes = await fetch(API_CONFIG[platform].lyric);
-            const lyricData = await lyricRes.json();
-            
-            // 获取封面（通过歌曲mid）
-            const mid = songData.data?.[0]?.mid;
-            const cover = mid ? `https://y.gtimg.cn/music/photo_new/T002R800x800M000${mid}.jpg` : '';
-            
-            return res.status(200).json({
+        // 网易云特殊处理
+        if (platform === '2') {
+            res.status(200).json({
                 code: 200,
-                cover: cover || songData.data?.[0]?.cover,
-                title: songData.data?.[0]?.song,
-                artist: songData.data?.[0]?.singer,
-                album: songData.data?.[0]?.album,
-                lyric: lyricData.data?.lrc || '暂无歌词'
+                cover: data.cover,
+                title: data.title,
+                artist: data.singer,
+                album: '', // 网易云API无专辑字段
+                lyric: data.lrc || '暂无歌词'
+            });
+        } 
+        // 酷我特殊处理
+        else if (platform === '3') {
+            res.status(200).json({
+                code: 200,
+                cover: data.data.pic,
+                title: data.data.name,
+                artist: data.data.artist,
+                album: data.data.album,
+                lyric: data.data.lrc || '暂无歌词'
             });
         }
-
-        // 其他平台统一处理
-        res.status(200).json({
-            code: 200,
-            cover: songData.cover || songData.data?.pic,
-            title: songData.title || songData.data?.name,
-            artist: songData.singer || songData.data?.artist,
-            album: songData.album || songData.data?.album,
-            lyric: songData.lrc || songData.data?.lrc || '暂无歌词'
-        });
+        // QQ音乐歌词
+        else {
+            res.status(200).json({
+                code: 200,
+                lyric: data.data?.lrc || '暂无歌词'
+            });
+        }
     } catch (error) {
         console.error('API请求失败:', error);
-        res.status(500).json({ code: 500, msg: '服务器错误' });
+        res.status(500).json({ 
+            code: 500, 
+            msg: '服务器错误',
+            ...(platform !== '1' ? { // 非QQ音乐返回空数据
+                cover: '',
+                title: '',
+                artist: '',
+                album: '',
+                lyric: '加载失败'
+            } : { lyric: '加载失败' })
+        });
     }
 };
