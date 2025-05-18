@@ -6,7 +6,7 @@ export default async (req, res) => {
         const data = await response.json();
 
         if (data.code !== 200 || !data.data) {
-            throw new Error('QQ音乐API返回异常');
+            throw new Error('API返回异常');
         }
 
         const song = data.data;
@@ -22,7 +22,7 @@ export default async (req, res) => {
             id: song.id,
             mid: song.mid,
             vid: song.vid,
-            type: t // 传递type参数到前端
+            type: t
         });
     } catch (error) {
         console.error('QQ音乐处理失败:', error);
