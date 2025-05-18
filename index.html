@@ -1,92 +1,93 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
+<html lang="zh-CN">
+    <!-- 未经允许，盗用必究！ -->
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>音乐解析</title>
+    <title>loading...</title>
     <style>
-        :root {
-            --bg-color: #f5f7fa;
-            --card-bg: #ffffff;
-            --text-color: #333333;
-            --primary-color: #4285f4;
-            --button-bg: #4285f4;
-            --button-hover: #3367d6;
-            --lyrics-bg: #f8f9fa;
+        @font-face {
+            font-family: 'MyFont';
+            src: url('https://m.ccw.site/creator-college/videos/48cbf6a175c7b59e534049e599eb5598.ttf') format('truetype');
         }
-
-        [data-theme="dark"] {
-            --bg-color: #121212;
-            --card-bg: #1e1e1e;
-            --text-color: #e0e0e0;
-            --primary-color: #bb86fc;
-            --button-bg: #bb86fc;
-            --button-hover: #9a67ea;
-            --lyrics-bg: #2d2d2d;
-        }
-
-        * {
+        *, 
+        ::placeholder,
+        ::before, 
+        ::after {
+            font-family: 'MyFont', sans-serif !important;
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            transition: background-color 0.3s, color 0.3s;
         }
 
-        body {
-            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            min-height: 100vh;
+        /* 动态背景 */
+        .dynamic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background-size: cover;
+            background-position: center;
+            transition: filter 1.5s ease, background-image 1s ease;
+        }
+
+        .bg-blur {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            backdrop-filter: blur(15px) brightness(0.6);
+            -webkit-backdrop-filter: blur(15px) brightness(0.6);
+        }
+
+        /* 内容容器 */
+        .content-container {
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            min-height: 100vh;
+            padding: 30px;
+            opacity: 0;
+            animation: fadeIn 0.8s 0.3s ease-out forwards;
         }
 
-        .container {
-            width: 100%;
-            max-width: 800px;
-        }
-
-        .loading-container {
-            background-color: var(--card-bg);
-            border-radius: 16px;
-            padding: 40px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        /* 加载动画 */
+        .loading-wrapper {
             text-align: center;
-            max-width: 500px;
-            margin: 0 auto;
+            margin-bottom: 40px;
         }
 
         .spinner {
-            width: 60px;
-            height: 60px;
+            width: 80px;
+            height: 80px;
             margin: 0 auto 25px;
             position: relative;
         }
 
-        .spinner::before {
-            content: "";
+        .spinner-circle {
             position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            border: 4px solid rgba(66, 133, 244, 0.2);
+            border: 8px solid transparent;
+            border-top-color: rgba(255, 165, 0, 0.8);
+            animation: spin 1.5s linear infinite;
         }
 
-        .spinner::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 4px solid transparent;
-            border-top-color: var(--primary-color);
-            animation: spin 1s linear infinite;
+        .spinner-circle:nth-child(2) {
+            border-top-color: rgba(75, 192, 192, 0.8);
+            animation-delay: 0.2s;
+        }
+
+        .spinner-circle:nth-child(3) {
+            border-top-color: rgba(153, 102, 255, 0.8);
+            animation-delay: 0.4s;
         }
 
         @keyframes spin {
@@ -95,178 +96,250 @@
         }
 
         .loading-text {
-            font-size: 18px;
-            font-weight: 500;
-            margin-bottom: 15px;
-            color: var(--text-color);
+            font-size: 1.5rem;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeIn 0.8s 0.5s ease-out forwards;
         }
 
-        .quote {
-            font-style: italic;
-            color: var(--text-color);
-            opacity: 0.7;
-            line-height: 1.6;
-        }
-
-        .music-card {
-            background-color: var(--card-bg);
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            display: none;
-            max-width: 800px;
+        .quote-container {
+            max-width: 600px;
             margin: 0 auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            opacity: 0;
+            animation: fadeIn 0.8s 0.7s ease-out forwards;
+        }
+
+        .quote-text {
+            font-size: 1.2rem;
+            color: #fff;
+            line-height: 1.6;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .quote-author {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-align: right;
+            font-style: italic;
+        }
+
+        /* 音乐卡片 */
+        .music-card {
+            width: 100%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: cardAppear 0.8s ease-out forwards;
+        }
+
+        @keyframes cardAppear {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .cover-container {
             position: relative;
-            width: 100%;
-            padding-top: 100%;
-            background: linear-gradient(135deg, var(--bg-color) 0%, #c3cfe2 100%);
+            width: 250px;
+            height: 250px;
+            margin: 0 auto 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transform: scale(0.9);
+            transition: transform 0.5s ease;
+        }
+
+        .cover-container:hover {
+            transform: scale(1);
         }
 
         .cover {
-            position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: transform 0.5s ease;
         }
 
         .music-info {
-            padding: 25px;
+            text-align: center;
+            color: #fff;
         }
 
-        .title {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--text-color);
+        .music-title {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
         }
 
-        .subtitle {
-            font-size: 16px;
-            color: var(--text-color);
+        .music-subtitle {
+            font-size: 1.2rem;
             opacity: 0.8;
             margin-bottom: 15px;
         }
 
-        .meta {
-            font-size: 16px;
-            color: var(--text-color);
+        .music-meta {
+            font-size: 1rem;
             opacity: 0.7;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
         }
 
         .action-button {
             display: inline-block;
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: var(--button-bg);
+            margin-top: 25px;
+            padding: 12px 30px;
+            background: linear-gradient(45deg, #ff8a00, #e52e71);
             color: white;
-            border-radius: 8px;
+            border-radius: 50px;
             text-decoration: none;
-            font-weight: 500;
-            transition: background-color 0.3s;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
             border: none;
             cursor: pointer;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: buttonAppear 0.6s 0.4s ease-out forwards;
         }
 
         .action-button:hover {
-            background-color: var(--button-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes buttonAppear {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .lyrics-container {
-            margin-top: 25px;
-            padding-top: 25px;
-            border-top: 1px solid var(--border-color);
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .lyrics-title {
-            font-size: 18px;
-            font-weight: 500;
+            font-size: 1.3rem;
+            color: #fff;
             margin-bottom: 15px;
-            color: var(--text-color);
+            text-align: center;
         }
 
-        .lyrics {
-            white-space: pre-wrap;
-            padding: 15px;
-            background-color: var(--lyrics-bg);
-            border-radius: 8px;
+        .lyrics-content {
             max-height: 300px;
             overflow-y: auto;
-            line-height: 1.8;
-            color: var(--text-color);
-            opacity: 0.9;
-        }
-
-        @media (min-width: 768px) {
-            .music-card {
-                display: grid;
-                grid-template-columns: 300px 1fr;
-            }
-            .cover-container {
-                padding-top: 0;
-                height: 300px;
-            }
-        }
-
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        ::-webkit-scrollbar-thumb {
+            padding: 15px;
             background: rgba(0, 0, 0, 0.2);
-            border-radius: 3px;
+            border-radius: 10px;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.8;
+            white-space: pre-wrap;
+            font-size: 0.95rem;
         }
-        [data-theme="dark"] ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
+
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .content-container {
+                padding: 20px;
+            }
+            
+            .music-card {
+                padding: 20px;
+            }
+            
+            .cover-container {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .music-title {
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="dynamic-bg" id="dynamicBg"></div>
+    <div class="bg-blur"></div>
+
+    <div class="content-container">
         <!-- 加载状态 -->
-        <div class="loading-container" id="loading">
-            <div class="spinner"></div>
+        <div class="loading-wrapper" id="loading">
+            <div class="spinner">
+                <div class="spinner-circle"></div>
+                <div class="spinner-circle"></div>
+                <div class="spinner-circle"></div>
+            </div>
             <div class="loading-text">正在解析音乐数据...</div>
-            <div class="quote" id="quote">"音乐是上帝赐给人类最美的礼物" — 马丁·路德</div>
+            <div class="quote-container">
+                <div class="quote-text" id="quoteText">"音乐是上帝赐给人类最美的礼物"</div>
+                <div class="quote-author" id="quoteAuthor">— 马丁·路德</div>
+            </div>
         </div>
 
         <!-- 音乐卡片 -->
         <div class="music-card" id="musicCard">
             <div class="cover-container">
-                <img class="cover" id="cover" alt="专辑封面" onerror="this.src='https://via.placeholder.com/500?text=No+Cover'">
+                <img class="cover" id="cover" alt="专辑封面" onerror="this.onerror=null;this.src='https://via.placeholder.com/500?text=No+Cover'">
             </div>
+            
             <div class="music-info">
-                <h1 class="title" id="title"></h1>
-                <p class="subtitle" id="subtitle"></p>
-                <p class="meta" id="artist"></p>
-                <p class="meta" id="album"></p>
-                <p class="meta" id="time"></p>
-                <button id="actionButton" class="action-button" style="display: none;">跳转播放</button>
+                <h1 class="music-title" id="musicTitle"></h1>
+                <p class="music-subtitle" id="musicSubtitle"></p>
+                <p class="music-meta" id="musicArtist"></p>
+                <p class="music-meta" id="musicAlbum"></p>
+                <p class="music-meta" id="musicTime"></p>
+                
+                <button id="actionButton" class="action-button">跳转播放</button>
                 
                 <div class="lyrics-container">
                     <div class="lyrics-title">歌词</div>
-                    <div class="lyrics" id="lyrics"></div>
+                    <div class="lyrics-content" id="lyricsContent"></div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // 系统主题检测
-        function detectColorScheme() {
-            const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-            document.documentElement.setAttribute('data-theme', theme);
-            
-            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-                document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
-            });
+        // 名言数据
+        const quotes = [
+            { text: "音乐是上帝赐给人类最美的礼物", author: "马丁·路德" },
+            { text: "没有音乐，生活将是一个错误", author: "尼采" },
+            { text: "音乐是唯一的世界语言", author: "理查德·瓦格纳" },
+            { text: "音乐是心灵的语言", author: "贝多芬" },
+            { text: "音乐是人类的共同记忆", author: "鲍勃·迪伦" }
+        ];
+
+        // 显示随机名言
+        function showRandomQuote() {
+            const quote = quotes[Math.floor(Math.random() * quotes.length)];
+            document.getElementById('quoteText').textContent = `"${quote.text}"`;
+            document.getElementById('quoteAuthor').textContent = `— ${quote.author}`;
         }
 
         // 解析URL参数
@@ -310,19 +383,23 @@
         function displayMusicInfo(data) {
             if (data.code !== 200) throw new Error('数据解析失败');
 
-            // 基础信息
+            // 设置背景和标题
+            document.getElementById('dynamicBg').style.backgroundImage = `url(${data.cover})`;
+            document.title = `Preview | ${data.title} - ${data.artist}`;
+
+            // 填充音乐信息
             document.getElementById('cover').src = data.cover || 'https://via.placeholder.com/500?text=No+Cover';
-            document.getElementById('title').textContent = data.title || '未知歌曲';
-            document.getElementById('subtitle').textContent = data.subtitle || '';
-            document.getElementById('artist').textContent = `歌手: ${data.artist || '未知'}`;
-            document.getElementById('album').textContent = `专辑: ${data.album || '未知'}`;
-            document.getElementById('time').textContent = `发行时间: ${data.time || '未知'}`;
-            document.getElementById('lyrics').textContent = data.lyric || '暂无歌词';
+            document.getElementById('musicTitle').textContent = data.title || '未知歌曲';
+            document.getElementById('musicSubtitle').textContent = data.subtitle || '';
+            document.getElementById('musicArtist').textContent = `歌手: ${data.artist || '未知'}`;
+            document.getElementById('musicAlbum').textContent = `专辑: ${data.album || '未知'}`;
+            document.getElementById('musicTime').textContent = `发行时间: ${data.time || '未知'}`;
+            document.getElementById('lyricsContent').textContent = data.lyric || '暂无歌词';
 
             // 处理跳转按钮
             const button = document.getElementById('actionButton');
             if (data.type === '1' && data.link) {
-                button.style.display = 'block';
+                button.style.display = 'inline-block';
                 button.onclick = () => {
                     window.open(`${data.link}?f=${platform}&name=${encodeURIComponent(data.title)}&singer=${encodeURIComponent(data.artist)}&id=${data.id}`, '_blank');
                 };
@@ -330,9 +407,9 @@
                 button.style.display = 'none';
             }
 
-            // 显示卡片
+            // 切换显示
             document.getElementById('loading').style.display = 'none';
-            document.getElementById('musicCard').style.display = 'grid';
+            document.getElementById('musicCard').style.display = 'block';
         }
 
         // 错误处理
@@ -343,7 +420,7 @@
 
         // 初始化
         async function init() {
-            detectColorScheme();
+            showRandomQuote();
             try {
                 const musicData = await fetchMusicData();
                 displayMusicInfo(musicData);
@@ -356,4 +433,5 @@
         window.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
+
 </html>
