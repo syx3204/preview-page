@@ -1,7 +1,6 @@
 module.exports = async (req, res) => {
     const { platform, id } = req.query;
 
-    // 从环境变量获取API地址
     const API_CONFIG = {
         '1': { // QQ音乐
             song: `${process.env.QQ_MUSIC_API}${id}`,
@@ -22,24 +21,36 @@ module.exports = async (req, res) => {
     try {
         // 获取歌曲信息
         const songRes = await fetch(API_CONFIG[platform].song);
-        const songData = await songRes.json();
+        let songData = await songRes.json();
 
-        // 如果是QQ音乐，额外获取歌词
-        let lyric = '';
+        // QQ音乐特殊处理
         if (platform === '1') {
+            // 获取歌词
             const lyricRes = await fetch(API_CONFIG[platform].lyric);
             const lyricData = await lyricRes.json();
-            lyric = lyricData.data?.lrc || '暂无歌词';
+            
+            // 获取封面（通过歌曲mid）
+            const mid = songData.data?.[0]?.mid;
+            const cover = mid ? `https://y.gtimg.cn/music/photo_new/T002R800x800M000${mid}.jpg` : '';
+            
+            return res.status(200).json({
+                code: 200,
+                cover: cover || songData.data?.[0]?.cover,
+                title: songData.data?.[0]?.song,
+                artist: songData.data?.[0]?.singer,
+                album: songData.data?.[0]?.album,
+                lyric: lyricData.data?.lrc || '暂无歌词'
+            });
         }
 
-        // 统一返回格式
+        // 其他平台统一处理
         res.status(200).json({
             code: 200,
-            cover: songData.data?.[0]?.cover || songData.cover || songData.data?.pic,
-            title: songData.data?.[0]?.song || songData.title || songData.data?.name,
-            artist: songData.data?.[0]?.singer || songData.singer || songData.data?.artist,
-            album: songData.data?.[0]?.album || songData.album || songData.data?.album,
-            lyric: lyric || songData.lrc || songData.data?.lrc || '暂无歌词'
+            cover: songData.cover || songData.data?.pic,
+            title: songData.title || songData.data?.name,
+            artist: songData.singer || songData.data?.artist,
+            album: songData.album || songData.data?.album,
+            lyric: songData.lrc || songData.data?.lrc || '暂无歌词'
         });
     } catch (error) {
         console.error('API请求失败:', error);
