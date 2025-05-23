@@ -329,18 +329,219 @@
     <script>
         // 名言数据
         const quotes = [
-            { text: "音乐是上帝赐给人类最美的礼物", author: "马丁·路德" },
-            { text: "没有音乐，生活将是一个错误", author: "尼采" },
-            { text: "音乐是唯一的世界语言", author: "理查德·瓦格纳" },
-            { text: "音乐是心灵的语言", author: "贝多芬" },
-            { text: "音乐是人类的共同记忆", author: "鲍勃·迪伦" }
-        ];
+                {
+                    "hitokoto": "人，百年一世；龙，百年一岁。君生吾已老，君未变，而吾已老。",
+                    "from": "妖怪名单",
+                    "from_who": "封夕"
+                },
+                {
+                    "hitokoto": "Our eyes meet fondly is a spiritual kiss of humanity without sexual desire.   对视，是人类不带情欲的精神接吻。",
+                    "from": null,
+                    "from_who": null
+                },
+                {
+                    "hitokoto": "交際っていうのは、1人で為しえないことです。ですから、2人でやってみましょうか   交往这种事情，一个人是做不到的，所以我们两个人一起来吧！",
+                    "from": "HELLO WORLD",
+                    "from_who": "いちぎょうるり(一行琉璃)"
+                },
+                {
+                    "hitokoto": "たとえこれが現実じゃなくて、僕のものじゃなくても……彼女の幸せな笑顔が見たい 就算这些都不是现实，就算这些都不属于我……我也想看到她幸福的笑容。",
+                    "from": "HELLO WORLD",
+                    "from_who": "かたがき なおみ(坚书直实)"
+                },
+                {
+                    "hitokoto": "世界が滅びてももう一度あなたに会いたい   即使世界毁灭，我也想再见到你一次。",
+                    "from": "HELLO WORLD",
+                    "from_who": null
+                },
+                {
+                    "hitokoto": "人生用特写镜头来看是悲剧，长镜头来看则是喜剧。",
+                    "from": "名人名言",
+                    "from_who": "卓别林"
+                },
+                {
+                    "hitokoto": "那些听不见音乐的人以为跳舞的人疯了。",
+                    "from": "上帝死了",
+                    "from_who": "尼采"
+                },
+                {
+                    "hitokoto": "悲剧的魅力，在于他毁灭的美；悲剧的不幸，在于它往往不仅仅是悲剧，而且是永远的生活。",
+                    "from": "骆驼祥子",
+                    "from_who": "老舍"
+                },
+                {
+                    "hitokoto": "黄油嘴边讲，纯爱心中藏。废萌永不倒，甜作放光芒。",
+                    "from": "galgame",
+                    "from_who": null
+                },
+                {
+                    "hitokoto": "我爱你，爱你是我唯一的信仰。",
+                    "from": null,
+                    "from_who": null
+                },
+                {
+                    "hitokoto": "无限进步",
+                    "from": null,
+                    "from_who": '影视飓风'
+                },
+                {
+                    "hitokoto": "这个正义朋友面善又友善，因此批准马匹一周跑两天，百姓也自然要门快过终点，若做大国公民只须身有钱。",
+                    "from": "皇后大道東",
+                    "from_who": "罗大佑"
+                },
+                {
+                    "hitokoto": "我不知将去何方，但我已在路上。",
+                    "from": "风之谷",
+                    "from_who": "宫崎骏"
+                },
+                {
+                    "hitokoto": "世界上只有一种真正的英雄主义，就是认清了生活的真相后还依然热爱它。",
+                    "from": "米开朗基罗传",
+                    "from_who": "罗曼·罗兰"
+                },
+                {
+                    "hitokoto": "愿中国青年都摆脱冷气，只是向上走。",
+                    "from": "热风·随感录四十一",
+                    "from_who": "鲁迅"
+                },
+                {
+                    "hitokoto": "I hope you're here for me.   我希望你为我而来。",
+                    "from": null,
+                    "from_who": null
+                },
+                {
+                    "hitokoto": "人間の絆は星の瞬きよりも儚い   人与人的羁绊，比星辰的闪烁更短暂",
+                    "from": "Fate/Grand Order",
+                    "from_who": null
+                },
+                {
+                    "hitokoto": "我们一路奋战，不是为了改变世界，而是为了不让世界改变我们。",
+                    "from": "熔炉",
+                    "from_who": null
+                },
+                {
+                    "hitokoto": "我命由我不由天！",
+                    "from": "哪吒之魔童降世",
+                    "from_who": "哪吒"
+                },
+                {
+                    "hitokoto": "Let life be beautiful like summer flowers and death like autumn leaves. 生如夏花之绚烂，死如秋叶之静美。",
+                    "from": "飞鸟集",
+                    "from_who": "泰戈尔"
+                },
+                {
+                    "hitokoto": "月色真美",
+                    "from": "夏目漱石",
+                    "from_who": null
+                },
+                {
+                    "hitokoto": "自由とは何か。自分が自分自身であることを妨げるものからの解放だ。   自由是什么？是让自己成为自己的解放。",
+                    "from": "进击的巨人",
+                    "from_who": "艾伦·耶格尔"
+                },
+                {
+                    "hitokoto": "念念不忘，必有回响。",
+                    "from": "一代宗师",
+                    "from_who": "王家卫"
+                },
+                {
+                    "hitokoto": "The answer is blowing in the wind.   答案在风中飘扬。",
+                    "from": "Blowin' in the Wind",
+                    "from_who": "鲍勃·迪伦"
+                },
+                {
+                    "hitokoto": "玻璃晴朗，橘子辉煌。",
+                    "from": "过节",
+                    "from_who": "北岛"
+                },
+                {
+                    "hitokoto": "我们都是阴沟里的虫子，但总还是得有人仰望星空。",
+                    "from": "三体",
+                    "from_who": "刘慈欣"
+                },
+                {
+                    "hitokoto": "We are all in the gutter, but some of us are looking at the stars.   身在井隅，心向璀璨。",
+                    "from": "温夫人的扇子",
+                    "from_who": "奥斯卡·王尔德"
+                },
+                {
+                    "hitokoto": "你指尖跃动的电光，是我此生不灭的信仰！",
+                    "from": "某科学的超电磁炮",
+                    "from_who": null
+                },
+                {
+                    "hitokoto": "未曾哭过长夜的人，不足以语人生。",
+                    "from": "威廉·迈斯特的学习时代",
+                    "from_who": "歌德"
+                },
+                {
+                    "hitokoto": "人类从历史中学到的唯一教训，就是人类无法从历史中学到任何教训。",
+                    "from": "历史哲学",
+                    "from_who": "黑格尔"
+                },
+                {
+                    "hitokoto": "The cake is a lie!   蛋糕是谎言！",
+                    "from": "传送门",
+                    "from_who": null
+                },
+                {
+                    "hitokoto": "凌晨四点钟，看到海棠花未眠。",
+                    "from": "花未眠",
+                    "from_who": "川端康成"
+                },
+                {
+                    "hitokoto": "给岁月以文明，而不是给文明以岁月。",
+                    "from": "三体",
+                    "from_who": "刘慈欣"
+                },
+                {
+                    "hitokoto": "人の心は原稿用紙のようなものさ。いつも同じことばかり書いていたら、文字は滲んで読めなくなる。   人心就像稿纸，总写相同的内容，字迹会洇染到无法辨认。",
+                    "from": "冰菓",
+                    "from_who": "折木奉太郎"
+                },
+                {
+                    "hitokoto": "弱小和无知不是生存的障碍，傲慢才是。",
+                    "from": "三体",
+                    "from_who": "刘慈欣"
+                },
+                {
+                    "hitokoto": "El Psy Kongroo.   命运石之门的选择。",
+                    "from": "命运石之门",
+                    "from_who": "凤凰院凶真"
+                },
+                {
+                    "hitokoto": "不要温和地走进那个良夜",
+                    "from": "狄兰·托马斯诗选",
+                    "from_who": "狄兰·托马斯"
+                },
+                {
+                    "hitokoto": "林深时见鹿，海蓝时见鲸，梦醒时见你",
+                    "from": null,
+                    "from_who": null
+                },
+                {
+                    "hitokoto": "All we have to decide is what to do with the time that is given to us.   所有我们必须决定的，是如何利用给予我们的时间。",
+                    "from": "指环王",
+                    "from_who": "甘道夫"
+                },
+                {
+                    "hitokoto": "代码写诗，算法为歌",
+                    "from": "开发者箴言",
+                    "from_who": null
+                },
+                {
+                    "hitokoto": "须知少时凌云志，曾许人间第一流",
+                    "from": "题三十小像",
+                    "from_who": "吴庆坻"
+                }
+
+            ];;
 
         // 显示随机名言
         function showRandomQuote() {
             const quote = quotes[Math.floor(Math.random() * quotes.length)];
-            document.getElementById('quoteText').textContent = `"${quote.text}"`;
-            document.getElementById('quoteAuthor').textContent = `— ${quote.author}`;
+            document.getElementById('quoteText').textContent = `"${quote.hitokoto}"`;
+            document.getElementById('quoteAuthor').textContent = `— ${quote.from_who}  ${quote.from}`;
         }
 
         // 解析URL参数
